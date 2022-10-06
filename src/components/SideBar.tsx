@@ -1,15 +1,25 @@
+import { useEffect, useState } from 'react';
+
 import '../styles/sidebar.scss';
 import { Button } from './Button';
 
 import { GenreResponseProps } from '../App';
+import { api } from '../services/api';
 
 interface SideBarProps {
-  genres: Array<GenreResponseProps>,
   selectedGenreId: number,
   setSelectedGenreId: any,
 }
 
-export function SideBar({ genres, selectedGenreId, setSelectedGenreId }: SideBarProps) {
+export function SideBar({ selectedGenreId, setSelectedGenreId }: SideBarProps) {
+  const [genres, setGenres] = useState<GenreResponseProps[]>([]);
+
+  useEffect(() => {
+    api.get<GenreResponseProps[]>('genres').then((response) => {
+      setGenres(response.data);
+    })
+  }, []);
+
   return (
     <nav className="sidebar">
       <span>Watch<p>Me</p></span>
